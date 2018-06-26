@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Home Automation System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/css/style.css" />
+    <!-- include jQuery client side script -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lily+Script+One" rel="stylesheet"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <!-- include socket.io client side script -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body{
+            font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+        }
+        .heading-text{
+            font-family: 'Lily Script One', cursive; 
+        }
+    </style> 
+</head>
+<body>    
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark  bg-dark">
+        <a class="navbar-brand" href="#">
+            <img src="/static/images/logo_icon_blue_268_198_280514.png" width="30" height="20" class="d-inline-block" alt="">
+            <span class="heading-text">Home Automation System</span>
+        </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse navbar-right" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto right">
+            <li class="nav-item active">
+                <a id="welcometext" class="nav-link" href="#">Hello<span id="username"></span></a>
+            </li>
+            <li class="nav-item">
+                <a id="livefeed" class="nav-link" href="#">Live Camera</a>
+            </li>
+            <li class="nav-item">
+                <a id="logout" class="nav-link" href="#">Logout</a>
+            </li>
+        </ul>
+    </div>
+    </nav>
+    <!-- <ons-toolbar>
+        <div class="left">
+        <ons-toolbar-button icon="md-face"></ons-toolbar-button>
+        </div>
+    
+        <div class="center">Home Automation System</div>
+    
+        <div class="right">
+        <ons-toolbar-button>Hello, Amrinder</ons-toolbar-button>
+        <ons-toolbar-button>Logout</ons-toolbar-button>
+        </div>
+    </ons-toolbar> -->
+    <div class="row no-gutter">
+        <div class="col-md-6">
+                <!-- <ons-list-header>Settings</ons-list-header> -->
+                <ons-list-item>
+                  <div class="center">
+                    Emergency Power Shutoff
+                  </div>
+                  <div class="right">
+                    <ons-switch id="emergency"></ons-switch>
+                  </div>
+                </ons-list-item>
+        </div>
+        <div class="col-md-6">
+                <ons-list-item>
+                  <div class="center">
+                    Main Door
+                  </div>
+                  <div class="right">
+                    <ons-switch id="maindoor"></ons-switch>
+                  </div>
+                </ons-list-item>
+        </div>
+    </div>
+    
+    <div class="row no-gutter">
+        <div class="col-md-3">
+            <ons-list-item>
+                <div class="left">
+                    <img class="list-item__thumbnail" src="/static/images/baseline-access_time-24px.svg">
+                </div>
+                <div class="center">
+                    <span class="list-item__title" id="time"></span><span class="list-item__subtitle" id="date">Time</span>
+                </div>
+            </ons-list-item>
+        </div>
+        <div class="col-md-3">
+            <ons-list-item>
+                <div class="left">
+                        <img class="list-item__thumbnail" src="/static/images/baseline-alarm-24px.svg">
+                </div>
+                <div class="center">
+                    <span class="list-item__title">Latest Alarm</span><span class="list-item__subtitle">Alarm</span>
+                </div>
+            </ons-list-item>
+        </div>
+        <div class="col-md-3">
+            <ons-list-item>
+                <div class="left">
+                    <img class="icons" src="/static/images/iconmonstr-weather-48.svg">
+                </div>
+                <div class="center">
+                    <span class="list-item__title">Temperature Reading</span><span class="list-item__subtitle">Home temperature</span>
+                </div>
+            </ons-list-item>
+        </div>
+        <div class="col-md-3">
+            <ons-list-item>
+                <div class="left">
+                    <img class="list-item__thumbnail" src="/static/images/iconmonstr-weather-129.svg">
+                </div>
+                <div class="center">
+                    <span class="list-item__title">Humidity Reading</span><span class="list-item__subtitle">Humidity %</span>
+                </div>
+            </ons-list-item>
+        </div>
+    </div>
+
+    <div class="row no-gutter">
+        <div class="col-md-6">
+            <ons-list>
+                <ons-list-header>Room 1</ons-list-header>
+                <ons-list-item>
+                    <div class="left">
+                        <img class="list-item__thumbnail" id="bulb1" src="/static/images/iconmonstr-light-bulb-12.svg">
+                    </div>
+                    <div class="center">Light</div>
+                    <div class="right">
+                        <ons-switch id="switch-led-room1"></ons-switch>
+                    </div>
+                </ons-list-item>
+                <ons-list-item>
+                    <div class="left">
+                        <img class="icons" src="/static/images/ventilating-fan.svg">
+                    </div>                    
+                    <div class="center">Fan</div>
+                    <div class="right">                          
+                        <ons-switch id="switch-fan-room1"></ons-switch>
+                    </div>
+                </ons-list-item>
+            </ons-list>
+        </div>
+        <div class="col-md-6">
+            <ons-list>
+                <ons-list-header>Room 2</ons-list-header>
+                <ons-list-item>
+                    <div class="left">
+                        <img class="list-item__thumbnail" id="bulb2" src="/static/images/iconmonstr-light-bulb-12.svg">
+                    </div>
+                    <div class="center">Light</div>
+                    <div class="right">
+                        <ons-switch id="switch-led-room2"></ons-switch>
+                    </div>
+                </ons-list-item>
+                <ons-list-item>
+                    <div class="left">
+                            <img class="icons" src="/static/images/ventilating-fan.svg">
+                    </div>
+                    <div class="center">Fan</div>
+                    <div class="right">                          
+                        <ons-switch id="switch-fan-room2"></ons-switch>
+                    </div>
+                </ons-list-item>
+            </ons-list>
+        </div>
+    </div>
+    <script src="/static/js/index.js"></script>
+</body>
+</html>
