@@ -28,7 +28,7 @@ function getData() {
 
 function updateStatus(jsonObj){
     //console.log(jsonObj)
-    jsonObj = JSON.parse(jsonObj)
+    //jsonObj = JSON.parse(jsonObj)
     console.log(jsonObj)
     jsonObj.room1Led ? jsonObj.room1Led = true : jsonObj.room1Led = false
     jsonObj.room2Led ? jsonObj.room2Led = true : jsonObj.room2Led = false

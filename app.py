@@ -2,8 +2,8 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from flask_socketio import SocketIO, emit
 import json
 import os
-#import RPi.GPIO as GPIO
-#import time
+import RPi.GPIO as GPIO
+import time
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -45,31 +45,31 @@ def statusChange(virtualButtonStatus):
     print(virtualButtonStatus)
     status = json.dumps(virtualButtonStatus)
     print(status)
+    status = json.loads(status)
     control(status)
     print(status['room1Led'])
-    
     emit('data',status, broadcast = True)
 
 
 def setup():
     print("reached here")
-    #GPIO.setmode(GPIO.BCM)
+    GPIO.setmode(GPIO.BCM)
     #GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)#Button to GPIO
-    #GPIO.setup(17, GPIO.OUT)  #LED to GPIO
+    GPIO.setup(17, GPIO.OUT)  #LED to GPIO
 
 def control(status):
     try:
         print("reached here")
         if status['room1Led'] == 1:
-            #GPIO.output(17, True)
+            GPIO.output(17, True)
             print("led on")
             time.sleep(0.2)
         elif status['room1Led'] == 0:
             print("led off")
-            #GPIO.output(17, False)
+            GPIO.output(17, False)
     except:
         print("GPIO cleanup")
-        #GPIO.cleanup()
+        GPIO.cleanup()
 
 
 if __name__ == '__main__':
