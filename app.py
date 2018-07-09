@@ -2,11 +2,11 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from flask_socketio import SocketIO, emit
 import json
 import os
-import RPi.GPIO as GPIO
-import time
+from RPi.control import Control
+
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app) 
 
 status = {'user': None, 'room1Led': 0, 'room2Led': 0, 'room1Fan': 0, 'room2Fan': 0}
 
@@ -24,7 +24,7 @@ def data():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     error = None
-    if request.method == 'POST':
+    if request.method == 'POST':    
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'Invalid Credentials. Please try again.'
         else:
@@ -46,33 +46,11 @@ def statusChange(virtualButtonStatus):
     status = json.dumps(virtualButtonStatus)
     print(status)
     status = json.loads(status)
-    control(status)
+    Control.change(status)
     print(status['room1Led'])
     emit('data',status, broadcast = True)
-
-
-def setup():
-    print("reached here")
-    GPIO.setmode(GPIO.BCM)
-    #GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)#Button to GPIO
-    GPIO.setup(17, GPIO.OUT)  #LED to GPIO
-
-def control(status):
-    try:
-        print("reached here")
-        if status['room1Led'] == 1:
-            GPIO.output(17, True)
-            print("led on")
-            time.sleep(0.2)
-        elif status['room1Led'] == 0:
-            print("led off")
-            GPIO.output(17, False)
-    except:
-        print("GPIO cleanup")
-        GPIO.cleanup()
-
-
+ 
 if __name__ == '__main__':
-    setup()
+    Control.setup()
     app.secret_key = os.urandom(12)
     app.run(host = '0.0.0.0', debug=True)
