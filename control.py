@@ -1,0 +1,61 @@
+import RPi.GPIO as GPIO
+from emergency import Emergency
+
+import time 
+
+class Control():
+    def __init__(self, status):
+        self.status = status;
+
+    def setup():
+        GPIO.setmode(GPIO.BCM)
+        #GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)#Button to GPIO
+        GPIO.setup(17, GPIO.OUT)  #Room1Led 
+        GPIO.setup(27, GPIO.OUT)  #Room2Led
+        GPIO.setup(23, GPIO.OUT)  #Room1Fan
+        GPIO.setup(24, GPIO.OUT)  #Room2Fan
+        print("Setup done")
+
+    def maindoor(value):
+        print("Main door triggered: ")
+        print(value)
+
+    def emergency(value):
+        Emergency.email(value)
+        print("Emergency: ")
+        print(value)
+
+    def change(status):
+        # try:
+        #     print("reached here")
+        #     print(status['room1Led'])
+        #     if status['room1Led'] == 1:
+        #         GPIO.output(17, True)
+        #         print("led on")
+        #         time.sleep(0.2)
+        #     elif status['room1Led'] == 0:
+        #         print("led off")
+        #         GPIO.output(17, False)
+        # except:
+        #     print("GPIO cleanup")
+        #     GPIO.cleanup()
+        if status['room1Led'] == 1:
+            GPIO.output(17, True)
+            time.sleep(0.2)
+        else:
+            GPIO.output(17, False)
+        if status['room2Led'] == 1:
+            GPIO.output(27, True)
+            time.sleep(0.2)
+        else:
+            GPIO.output(27, False)
+        if status['room1Fan'] == 1:
+            GPIO.output(23, True)
+            time.sleep(0.2)
+        else:
+            GPIO.output(23, False)
+        if status['room2Fan'] == 1:
+            GPIO.output(24, True)
+            time.sleep(0.2)
+        else:
+            GPIO.output(24, False)

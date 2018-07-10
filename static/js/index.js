@@ -8,6 +8,10 @@ const bulbIcon1 = document.getElementById("bulb1")
 const bulbIcon2 = document.getElementById("bulb2")
 const logout = document.getElementById("logout")
 const username = document.getElementById("username")
+const livefeed = document.getElementById("livefeed")
+const emergency = document.getElementById("emergency")
+const maindoor = document.getElementById("maindoor")
+var switches = document.querySelectorAll(".control-switch")
 
 $(() =>  {
     console.log('App successfully loaded')
@@ -15,31 +19,39 @@ $(() =>  {
     startTime()
     getCurrentDate()
     logout.href = 'http://' + document.domain + ':' +'5000/logout'
+    livefeed.href = 'http://' + document.domain + ':5000/livefeed' 
+    console.log(switches)
 })
 
 function getData() {
     $.get('http://' + document.domain + ':' +'5000/data', (data) => {
-        //console.log(data)
-        //jsonObj = JSON.parse(data)
-        updateStatus(data)
+        //console.log("Data" + data)
+        jsonObj = JSON.parse(data)
+        updateStatus( jsonObj)
         //console.log(jsonObj.ledRoom1)
     })
 }
 
 function updateStatus(jsonObj){
-    //console.log(jsonObj)
+    //console.log(jsonObj) 
     //jsonObj = JSON.parse(jsonObj)
-    console.log(jsonObj)
+    //console.log("Jsonparse" )
+    //console.log( jsonObj)
     jsonObj.room1Led ? jsonObj.room1Led = true : jsonObj.room1Led = false
     jsonObj.room2Led ? jsonObj.room2Led = true : jsonObj.room2Led = false
     jsonObj.room1Fan ? jsonObj.room1Fan = true : jsonObj.room1Fan = false
     jsonObj.room2Fan ? jsonObj.room2Fan = true : jsonObj.room2Fan = false
-    //console.log(jsonObj)
+    jsonObj.emergency ? jsonObj.emergency = true : jsonObj.emergency = false
+    jsonObj.maindoor ? jsonObj.maindoor = true : jsonObj.maindoor = false
+    //console.log("Json TF")
+    //console.log( jsonObj)
     setIcon(jsonObj)   
     ledRoom1.checked = jsonObj.room1Led
     ledRoom2.checked = jsonObj.room2Led
     fanRoom1.checked = jsonObj.room1Fan
     fanRoom2.checked = jsonObj.room2Fan
+    emergency.checked = jsonObj.emergency
+    maindoor.checked = jsonObj.maindoor
 }
 
 function setIcon(data){
@@ -59,12 +71,16 @@ function setComponentStatus(){
     componentStatus = { room1Led: ledRoom1.checked, 
                         room2Led: ledRoom2.checked, 
                         room1Fan: fanRoom1.checked, 
-                        room2Fan: fanRoom2.checked
+                        room2Fan: fanRoom2.checked,
+                        emergency: emergency.checked,
+                        maindoor: maindoor.checked
     }
     componentStatus.room1Led ? componentStatus.room1Led = 1 : componentStatus.room1Led = 0
     componentStatus.room2Led ? componentStatus.room2Led = 1 : componentStatus.room2Led = 0
     componentStatus.room1Fan ? componentStatus.room1Fan = 1 : componentStatus.room1Fan = 0
     componentStatus.room2Fan ? componentStatus.room2Fan = 1 : componentStatus.room2Fan = 0
+    componentStatus.emergency ? componentStatus.emergency = 1 : componentStatus.emergency = 0
+    componentStatus.maindoor ? componentStatus.maindoor = 1 : componentStatus.maindoor = 0
 }
 
 socket.on('data',(status) =>{
@@ -87,6 +103,41 @@ fanRoom1.addEventListener("change", () =>{
 
 fanRoom2.addEventListener("change", () =>{
     buttonChange()
+})
+
+emergency.addEventListener("change", () =>{
+    buttonChange()
+    if(emergency.checked == true) flag = 1
+    else if(emergency.checked == false) flag = 0
+    socket.emit('emergency', flag)
+    // turn and disable everything 
+    //document.querySelectorAll(".control-switch").addAttribute
+    
+    // console.log(emergency.value)
+    // console.log(emergency.checked)
+})
+
+socket.on('emergencyON', ()=>{
+    jsonObj = {room1Led: false, room2Fan: false, room2Led: false, room1Fan: false, maindoor: false, emergency: true}
+    updateStatus(jsonObj)
+    buttonChange()
+    switches.forEach(function(element) {
+        element.setAttribute("disabled")
+    }, this);
+})
+
+socket.on('emergencyOFF', ()=>{
+    switches.forEach(function(element) {
+        element.removeAttribute("disabled")
+    }, this);
+})
+
+maindoor.addEventListener( "change" , () => {
+    buttonChange()
+    if( maindoor.checked == true ) 
+        flag = 1
+    else flag = 0
+    socket.emit( 'maindoor' , flag )
 })
 
 function buttonChange(){

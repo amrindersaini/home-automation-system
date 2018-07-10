@@ -2,34 +2,40 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from flask_socketio import SocketIO, emit
 import json
 import os
-from RPi.control import Control
-
+from control import Control
+from emergency import Emergency
 
 app = Flask(__name__)
 socketio = SocketIO(app) 
 
-status = {'user': None, 'room1Led': 0, 'room2Led': 0, 'room1Fan': 0, 'room2Fan': 0}
+status = {'room1Led': 0, 'room2Led': 0, 'room1Fan': 0, 'room2Fan': 0, 'emergency':0, 'maindoor': 0}
+user = None
 
 @app.route('/')
 def index():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        return render_template('index.html')
+        return render_template('index.html', username = user)
 
 @app.route('/data', methods = ['GET'] )
 def data():
-    return status
+    return json.dumps(status)
+
+@app.route('/livefeed', methods = ['GET'])
+def livefeed():
+    return "live feed"
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     error = None
+    global user
     if request.method == 'POST':    
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'Invalid Credentials. Please try again.'
         else:
             session['logged_in'] = True
-            #status['user']
+            user = request.form['username']
             return redirect(url_for('index'))
     return render_template('login.html', error=error)
 
@@ -37,6 +43,20 @@ def login():
 def logout():
     session['logged_in'] = False
     return index()
+
+@socketio.on('maindoor')
+def maindoor(value):
+    Control.maindoor(value)
+
+@socketio.on('emergency')
+def emergency(flag):
+    if(flag == 1):
+        emit('emergencyON', broadcast = True)
+        Emergency.email()
+    else:
+        emit('emergencyOFF', broadcast = True)
+    
+    
 
 @socketio.on('statusChange')
 def statusChange(virtualButtonStatus):

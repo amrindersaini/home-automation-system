@@ -41,7 +41,7 @@
     <div class="collapse navbar-collapse navbar-right" id="navbarCollapse">
         <ul class="navbar-nav mr-auto right">
             <li class="nav-item active">
-                <a id="welcometext" class="nav-link" href="#">Hello<span id="username"></span></a>
+                <a id="welcometext" class="nav-link" href="#">Hello&nbsp;<span id="username">{{ username }}</span></a>
             </li>
             <li class="nav-item">
                 <a id="livefeed" class="nav-link" href="#">Live Camera</a>
@@ -141,7 +141,7 @@
                     </div>
                     <div class="center">Light</div>
                     <div class="right">
-                        <ons-switch id="switch-led-room1"></ons-switch>
+                        <ons-switch id="switch-led-room1" class = "control-switch"></ons-switch>
                     </div>
                 </ons-list-item>
                 <ons-list-item>
@@ -150,7 +150,7 @@
                     </div>                    
                     <div class="center">Fan</div>
                     <div class="right">                          
-                        <ons-switch id="switch-fan-room1"></ons-switch>
+                        <ons-switch id="switch-fan-room1" class = "control-switch"></ons-switch>
                     </div>
                 </ons-list-item>
             </ons-list>
@@ -164,7 +164,7 @@
                     </div>
                     <div class="center">Light</div>
                     <div class="right">
-                        <ons-switch id="switch-led-room2"></ons-switch>
+                        <ons-switch id="switch-led-room2" class = "control-switch"></ons-switch>
                     </div>
                 </ons-list-item>
                 <ons-list-item>
@@ -173,12 +173,15 @@
                     </div>
                     <div class="center">Fan</div>
                     <div class="right">                          
-                        <ons-switch id="switch-fan-room2"></ons-switch>
+                        <ons-switch id="switch-fan-room2" class = "control-switch"></ons-switch>
                     </div>
                 </ons-list-item>
             </ons-list>
         </div>
     </div>
+    <!-- Load Babel -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <!-- Your custom script here -->
     <script src="/static/js/index.js"></script>
 </body>
 </html>
