@@ -10,26 +10,103 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"  crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="/static/js/particles.js"></script>
+    <style>
+/* ---- reset ---- */
+
+body {
+  margin: 0;
+  font:normal 75% Arial, Helvetica, sans-serif;
+}
+
+canvas {
+  display: block;
+  vertical-align: bottom;
+}
+.jumbotron{
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+/* ---- particles.js container ---- */
+
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  background-image: url("");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+/* ---- stats.js ---- */
+
+.count-particles{
+  background: #000022;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 80px;
+  color: #13E8E9;
+  font-size: .8em;
+  text-align: left;
+  text-indent: 4px;
+  line-height: 14px;
+  padding-bottom: 2px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+}
+
+.js-count-particles{
+  font-size: 1.1em;
+}
+
+#stats,
+.count-particles{
+  -webkit-user-select: none;
+}
+
+#stats{
+  border-radius: 3px 3px 0 0;
+  overflow: hidden;
+}
+
+.count-particles{
+  border-radius: 0 0 3px 3px;
+}
+/* .top-margin{
+  margin: 100px flex;
+} */
+</style>
+
 </head>
 <body>
-    <div class = "container-fluid">
-        <br>
-        <div class = "jumbotron text-center">
-            <h1><span class="fa fa-lock"></span>Home Automation System App Login</h1>
+    <div id="particles-js">
+      <div class="top-margin">
+        <div class = "container  d-flex">
             <br>
-            <form action="" method="POST">
-                <input class="form-control" type="text" placeholder="Username" name="username" value="{{
-                    request.form.username }}">
-                <input class="form-control" type="password" placeholder="Password" name="password" value="{{
-                    request.form.password }}">
+            <div class = "jumbotron my-auto text-center">
+                <h1><span class="fa fa-lock"></span>&nbsp;Home Automation System Login</h1>
                 <br>
-                <button id="login" class="btn btn-dark btn-block">Login</button>
-            </form>
-                {% if error %}
-                <p class="error"><strong>Error:</strong> {{ error }}
-                {% endif %}
-        </div>
+                <form action="" method="POST">
+                    <input class="form-control" type="text" placeholder="Username" name="username" value="{{
+                        request.form.username }}">
+                    <input class="form-control" type="password" placeholder="Password" name="password" value="{{
+                        request.form.password }}">
+                    <br>
+                    <button id="login" class="btn btn-dark btn-block">Login</button>
+                </form>
+                    {% if error %}
+                    <p class="error"><strong>Error:</strong> {{ error }}
+                    {% endif %}
+            </div>
+          </div>
+      </div>
     </div>
+    
     <script src="/static/js/login.js"></script>
 </body>
 </html>

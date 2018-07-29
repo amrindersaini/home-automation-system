@@ -6,7 +6,7 @@ from control import Control
 from emergency import Emergency
 
 app = Flask(__name__)
-socketio = SocketIO(app) 
+socketio = SocketIO(app)
 
 status = {'room1Led': 0, 'room2Led': 0, 'room1Fan': 0, 'room2Fan': 0, 'emergency':0, 'maindoor': 0}
 user = None
@@ -14,6 +14,7 @@ user = None
 @app.route('/')
 def index():
     if not session.get('logged_in'):
+        return redirect(url_for('login'))
         return redirect(url_for('login'))
     else:
         return render_template('index.html', username = user)
@@ -24,19 +25,27 @@ def data():
 
 @app.route('/livefeed', methods = ['GET'])
 def livefeed():
-    return "live feed"
+    return render_template('livefeed.html', username = user)
+    #redirect('http://localhost:8000')
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     error = None
     global user
     if request.method == 'POST':    
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid Credentials. Please try again.'
-        else:
+        user = request.form['username']
+        password = request.form['password']
+        if (user == 'admin' and password == 'admin'):
             session['logged_in'] = True
-            user = request.form['username']
             return redirect(url_for('index'))
+        elif user == 'amrinder' and password == 'amrinder':
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        elif user == 'usman' and password == 'usman':
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        else:   
+            error = 'Invalid Credentials. Please try again.'
     return render_template('login.html', error=error)
 
 @app.route("/logout")
@@ -56,21 +65,23 @@ def emergency(flag):
     else:
         emit('emergencyOFF', broadcast = True)
     
-    
-
 @socketio.on('statusChange')
 def statusChange(virtualButtonStatus):
     global status
     #print(status)
-    print(virtualButtonStatus)
+    #print(virtualButtonStatus)
     status = json.dumps(virtualButtonStatus)
-    print(status)
+    #print(status)
     status = json.loads(status)
     Control.change(status)
-    print(status['room1Led'])
+    #print(status['room1Led'])
     emit('data',status, broadcast = True)
  
 if __name__ == '__main__':
     Control.setup()
+    #call('python servotestclass.py'.split())
+    #os.system('python servotestclass.py')
+    #AutomaticDoors.controller()
+    #subprocess.call("camera.py", shell = True)
     app.secret_key = os.urandom(12)
     app.run(host = '0.0.0.0', debug=True)

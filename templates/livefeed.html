@@ -1,0 +1,71 @@
+<html>
+<head>
+    <title>Security Camera Live Stream</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body{
+            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+        }
+        .heading-text{
+            font-family: 'Lily Script One', cursive; 
+        }
+        iframe{
+            max-height: 500px;
+        }
+        .max-height{
+            max-height: 500px;
+        }
+    </style> 
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark  bg-dark">
+        <a class="navbar-brand" href="#">
+            <img src="/static/images/logo_icon_blue_268_198_280514.png" width="30" height="20" class="d-inline-block" alt="">
+            <span class="heading-text">Home Automation System</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse navbar-right" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto right">
+                <li class="nav-item active">
+                    <a id="welcometext" class="nav-link" href="#">Hello&nbsp;<span id="username">{{ username }}</span></a>
+                </li>
+                <li class="nav-item">
+                    <a id="livefeed" class="nav-link" href="#">Live Camera</a>
+                </li>
+                <li class="nav-item">
+                    <a id="logout" class="nav-link" href="#">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="embed-responsive embed-responsive-4by3 max-height">
+        <iframe src="#" id="video" class="embed-responsive-item" ></iframe>
+            <!-- <img id="video" style='height: 100%; width: 100%; object-fit: contain'> -->
+    </div>
+    <div class="col-md-12">
+        <ons-list-item>
+            <div class="center">
+            Main Door
+            </div>
+            <div class="right">
+            <ons-switch id="maindoor"></ons-switch>
+            </div>
+        </ons-list-item>
+    </div>
+     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="/static/js/livefeed.js"></script>
+</body>
+</html>

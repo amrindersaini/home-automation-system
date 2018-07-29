@@ -12,12 +12,14 @@ const livefeed = document.getElementById("livefeed")
 const emergency = document.getElementById("emergency")
 const maindoor = document.getElementById("maindoor")
 var switches = document.querySelectorAll(".control-switch")
+const index = document.getElementById("welcometext")
 
 $(() =>  {
     console.log('App successfully loaded')
     getData() 
     startTime()
     getCurrentDate()
+    index.href = 'http://' + document.domain + ':5000/'
     logout.href = 'http://' + document.domain + ':' +'5000/logout'
     livefeed.href = 'http://' + document.domain + ':5000/livefeed' 
     console.log(switches)
