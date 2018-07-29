@@ -11,20 +11,26 @@
     <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
     <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
     <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Lily+Script+One" rel="stylesheet"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <!-- include socket.io client side script -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
     <script src="/socket.io/socket.io.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Bangers|Oswald:300" rel="stylesheet"> 
     <style>
         body{
-            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+            font-family: 'Oswald', sans-serif ;
         }
         .heading-text{
-            font-family: 'Lily Script One', cursive; 
+            font-family: 'Bangers', cursive;
+            
+        }
+        .list{
+            font-family: 'Oswald', sans-serif ;
+        }
+        .bg-dark {
+            background-color: #17191b !important;
         }
     </style> 
 </head>
@@ -40,10 +46,10 @@
     </button>
     <div class="collapse navbar-collapse navbar-right" id="navbarCollapse">
         <ul class="navbar-nav mr-auto right">
-            <li class="nav-item active">
+            <li id="hello" class="nav-item active">
                 <a id="welcometext" class="nav-link" href="#">Hello&nbsp;<span id="username">{{ username }}</span></a>
             </li>
-            <li class="nav-item">
+            <li id="live" class="nav-item">
                 <a id="livefeed" class="nav-link" href="#">Live Camera</a>
             </li>
             <li class="nav-item">
@@ -77,7 +83,7 @@
     </div>
     
     <div class="row no-gutter">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <ons-list-item>
                 <div class="left">
                     <img class="list-item__thumbnail" src="/static/images/baseline-access_time-24px.svg">
@@ -87,7 +93,7 @@
                 </div>
             </ons-list-item>
         </div>
-        <div class="col-md-3">
+        <!-- <div class="col-md-3">
             <ons-list-item>
                 <div class="left">
                         <img class="list-item__thumbnail" src="/static/images/baseline-alarm-24px.svg">
@@ -96,18 +102,18 @@
                     <span class="list-item__title">Latest Alarm</span><span class="list-item__subtitle">Alarm</span>
                 </div>
             </ons-list-item>
-        </div>
-        <div class="col-md-3">
+        </div> -->
+        <div class="col-md-4">
             <ons-list-item>
                 <div class="left">
                     <img class="icons" src="/static/images/iconmonstr-weather-48.svg">
                 </div>
                 <div class="center">
-                    <span class="list-item__title">Temperature Reading</span><span class="list-item__subtitle">Home temperature</span>
+                    <span class="list-item__title">Temperature Reading</span><span class="list-item__subtitle">&nbsp;&nbsp;Home temperature</span>
                 </div>
             </ons-list-item>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <ons-list-item>
                 <div class="left">
                     <img class="list-item__thumbnail" src="/static/images/iconmonstr-weather-129.svg">

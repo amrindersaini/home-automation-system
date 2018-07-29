@@ -13,6 +13,8 @@ const emergency = document.getElementById("emergency")
 const maindoor = document.getElementById("maindoor")
 var switches = document.querySelectorAll(".control-switch")
 const index = document.getElementById("welcometext")
+const live = document.getElementById("live")
+const hello = document.getElementById("hello")
 
 $(() =>  {
     console.log('App successfully loaded')
@@ -22,6 +24,8 @@ $(() =>  {
     index.href = 'http://' + document.domain + ':5000/'
     logout.href = 'http://' + document.domain + ':' +'5000/logout'
     livefeed.href = 'http://' + document.domain + ':5000/livefeed' 
+    hello.classList.add("active")
+    live.classList.remove("active")
     console.log(switches)
 })
 
@@ -31,6 +35,7 @@ function getData() {
         jsonObj = JSON.parse(data)
         updateStatus( jsonObj)
         //console.log(jsonObj.ledRoom1)
+
     })
 }
 

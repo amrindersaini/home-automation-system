@@ -11,14 +11,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     <script src="/static/js/particles.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Bangers|Oswald:300" rel="stylesheet"> 
     <style>
 /* ---- reset ---- */
 
 body {
   margin: 0;
-  font:normal 75% Arial, Helvetica, sans-serif;
+  font-family: 'Oswald', sans-serif;
 }
-
+.header{
+  font-family: 'Bangers', cursive;
+  font-size:3em;
+}
 canvas {
   display: block;
   vertical-align: bottom;
@@ -89,7 +93,7 @@ canvas {
         <div class = "container  d-flex">
             <br>
             <div class = "jumbotron my-auto text-center">
-                <h1><span class="fa fa-lock"></span>&nbsp;Home Automation System Login</h1>
+                <h1 class="header"><span class="fa fa-lock"></span>&nbsp;Home Automation System Login</h1>
                 <br>
                 <form action="" method="POST">
                     <input class="form-control" type="text" placeholder="Username" name="username" value="{{

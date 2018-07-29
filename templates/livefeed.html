@@ -13,18 +13,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Bangers|Oswald:300" rel="stylesheet"> 
     <style>
         body{
-            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+            font-family: 'Oswald', sans-serif;
         }
         .heading-text{
-            font-family: 'Lily Script One', cursive; 
+             font-family: 'Bangers', cursive;
         }
         iframe{
             max-height: 500px;
         }
         .max-height{
             max-height: 500px;
+        }
+        .bg-dark {
+            background-color: #17191b !important;
         }
     </style> 
 </head>
@@ -39,10 +43,10 @@
         </button>
         <div class="collapse navbar-collapse navbar-right" id="navbarCollapse">
             <ul class="navbar-nav mr-auto right">
-                <li class="nav-item active">
+                <li id="hello" class="nav-item active">
                     <a id="welcometext" class="nav-link" href="#">Hello&nbsp;<span id="username">{{ username }}</span></a>
                 </li>
-                <li class="nav-item">
+                <li id="live" class="nav-item">
                     <a id="livefeed" class="nav-link" href="#">Live Camera</a>
                 </li>
                 <li class="nav-item">
