@@ -20,7 +20,7 @@ def change(button_state):
     if button_state == 0:
         SetAngle(0)
     elif button_state == 1:
-        SetAngle(125)    
+        SetAngle(115)    
 
 def controller():
     last_button_state = 1

@@ -15,6 +15,9 @@ var switches = document.querySelectorAll(".control-switch")
 const index = document.getElementById("welcometext")
 const live = document.getElementById("live")
 const hello = document.getElementById("hello")
+const tempReading = document.getElementById("temp-reading")
+const humidityReading = document.getElementById("humidity-reading")
+
 
 $(() =>  {
     console.log('App successfully loaded')
@@ -95,6 +98,12 @@ socket.on('data',(status) =>{
     console.log(status) 
 })
 
+socket.on('sensors', values =>{
+    //console.log(values)
+    tempReading.innerHTML = Number.parseFloat(values.temperature).toFixed(2) + ' &deg;C'
+    humidityReading.innerHTML = Number.parseFloat(values.humidity).toFixed(2) + ' %'
+})
+
 ledRoom1.addEventListener("change", () =>{
     buttonChange()
     //ons.notification.alert('Value is ' + ledRoom1.value)
@@ -146,6 +155,10 @@ maindoor.addEventListener( "change" , () => {
     else flag = 0
     socket.emit( 'maindoor' , flag )
 })
+
+// socket.on('mainDoorHandler', ()=>{
+
+// })
 
 function buttonChange(){
     setComponentStatus()

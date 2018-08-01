@@ -22,8 +22,9 @@ PAGE="""<html>
         height: auto;
     }
     img{
-        padding: 1px;
-        border: 3px solid #021a40;
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
     }
 </style>
 </head>

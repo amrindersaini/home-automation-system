@@ -1,41 +1,24 @@
+#!/usr/bin/env python
+
 import RPi.GPIO as GPIO
 from time import sleep
 
-class AutomaticDoors():
-    def __init__(self):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(12,GPIO.OUT)
-        GPIO.setup(20, GPIO.IN)
-        self.pwm = GPIO.PWM(12,50)
-        self.pwm.start(0) 
-        self.controller()
-        
-    def SetAngle(self,angle):
-        duty = angle / 18 + 2
-        GPIO.output(12,True)
-        self.pwm.ChangeDutyCycle(duty)
-        sleep(1)
-        GPIO.output(12,False)
-        self.pwm.ChangeDutyCycle(0)
-
-    def change(self,button_state):
-        if button_state == 0:
-            self.SetAngle(0)
-        elif button_state == 1:
-            self.SetAngle(85)    
-
-    def controller(self):
-        last_button_state = 1
-        try:
-            while True:
-                button_state = GPIO.input(20)
-                # print(button_state)
-                if button_state != last_button_state:
-                    self.change(button_state)
-                    # print("reached here")
-                    sleep(2.0)
-                last_button_state = button_state
-        except:
-            # print("BC error")
-            self.pwm.stop()
-            GPIO.cleanup()
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(16,GPIO.OUT)
+GPIO.setup(25, GPIO.IN)
+pwm = GPIO.PWM(16,50)
+pwm.start(6)
+try:
+    while True:
+        button_state = GPIO.input(25)
+        if(button_state == 0):
+            pwm.ChangeDutyCycle(6)
+            sleep(1)
+        elif(button_state == 1):
+            pwm.ChangeDutyCycle(2.5)
+            sleep(1)
+        print("reached here")
+except:
+    #print("BC error")
+    pwm.stop()
+    GPIO.cleanup() 

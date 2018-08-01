@@ -17,4 +17,15 @@ $(() =>  {
     // })
 })
 
+socket.on('mainDoorHandler', () => {
+    if(value == 1)
+        maindoor.checked = true
+    else maindoor.checked = false
+})
 
+maindoor.addEventListener( "change" , () => {
+    if( maindoor.checked == true ) 
+        flag = 1
+    else flag = 0
+    socket.emit( 'maindoorLivefeed' , flag )
+})

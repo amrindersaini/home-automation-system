@@ -1,17 +1,22 @@
 from time import sleep
 import Adafruit_DHT
-import sys
+import threading
 
-def readDHT22() :
-    humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
-    return (humidity, temperature)
+thread = threading.Thread()
+thread_stop_event = threading.Event()
 
-def main():
-    while True:
-        humidity, temperature = readDHT22()
-        print ('Humidity is : {0:0.1f} %'.format(humidity))
-        print ('Temperature is : {0:0.1f} C'.format(temperature))
-        sleep(3)
+class Sensors(threading.Thread):
+    def __init__(self):
+        self.delay = 5
+        super(Sensors, self).__init__()
 
-if __name__ == '__main__':
-    main()
+    def main(self):
+        while not thread_stop_event.isSet():
+            humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 13)
+            print ('Humidity is : {0:0.1f}'.format(humidity))
+            print ('Temperature is : {0:0.1f}'.format(temperature))
+            socketio.emit('sensors', {'humidity': humidity, 'temperature': temperature})
+            sleep(self.delay)
+
+    def run(self):
+        self.main()

@@ -14,12 +14,28 @@ class Control():
         GPIO.setup(27, GPIO.OUT)  #Room2Led
         GPIO.setup(23, GPIO.OUT)  #Room1Fan
         GPIO.setup(24, GPIO.OUT)  #Room2Fan
-        # GPIO.setup(26, GPIO.OUT) #Main door lock
+        GPIO.setup(26, GPIO.OUT) #Main door lock
         print("Setup done")
 
     def maindoor(value):
         print("Main door triggered: ")
         print(value)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(26, GPIO.OUT) #Main door lock
+        pwm = GPIO.PWM(26,50)
+        pwm.start(6)
+        try:
+            if(value == 0):
+                pwm.ChangeDutyCycle(6)
+                time.sleep(1)
+            elif(value == 1):
+                pwm.ChangeDutyCycle(2.5)
+                time.sleep(1)
+            print("reached here")
+        except:
+            print("BC error")
+            pwm.stop()
+            GPIO.cleanup() 
         
     def emergency(value):
         Emergency.email(value)
