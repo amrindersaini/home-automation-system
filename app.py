@@ -55,6 +55,11 @@ class RegForm(FlaskForm):
     password = PasswordField('password', validators=[InputRequired(), Length(min=4, max=20)])
     key = StringField('key', validators=[InputRequired()])
 
+class LogForm(FlaskForm):
+    #username = StringField('username',  validators=[InputRequired(), Email(message='Invalid username'), Length(max=30)])
+    username = StringField('username',  validators=[InputRequired(), Length(max=30)])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=4, max=20)])
+
 class Sensors(Thread):
     def __init__(self):
         self.delay = 5
@@ -71,10 +76,17 @@ class Sensors(Thread):
     def run(self):
         self.main()
 
+
+@app.route('/')
+def dashboard():
+    if current_user.is_authenticated == True:
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('login'))
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegForm()
-    
     if request.method == 'POST':
         if form.validate():
             if(form.key.data == 'TPJ655'):
@@ -93,7 +105,7 @@ def register():
 def login():
     if current_user.is_authenticated == True:
         return redirect(url_for('index'))
-    form = RegForm()
+    form = LogForm()
     if request.method == 'POST':
         if form.validate():
             check_user = User.objects(username=form.username.data).first()
@@ -105,40 +117,11 @@ def login():
                 error = 'Invalid Credentials. Please try again.'
                 return render_template('login.html', form = form , error = error)
     return render_template('login.html', form=form)
-    # if current_user.is_authenticated == True:
-    #     return redirect(url_for('index'))
-    # form = RegForm()
-    # if request.method == 'POST':
-    #     if form.validate():
-    #         print("reached here 1")
-    #         check_user = User.objects(username=request.form['username']).first()
-    #         if check_user:
-    #             print("reached here 2")
-    #             if check_password_hash(check_user['password'], request.form['password']):
-    #                 print("reached here 3")
-    #                 login_user(check_user)
-    #                 return redirect(url_for('index'))
-    #             else: 
-    #                 error = 'Invalid Credentials. Please try again.'
-    #                 return render_template('login.html', form = form , error = error)
-    # return render_template('login.html', form=form)
-
-
-@app.route('/')
-@login_required
-def dashboard():
-    if current_user.is_authenticated == True:
-        return redirect(url_for('index'))
-    else:
-        return redirect(url_for('login'))
-    # return render_template('index.html', username = current_user.username)
 
 @app.route('/index')
 @login_required
 def index():
     return render_template('index.html', username = current_user.username)
-
-
 
 @app.route('/data', methods = ['GET'] )
 @login_required
@@ -149,28 +132,6 @@ def data():
 @login_required
 def livefeed():
     return render_template('livefeed.html', username = user)
-    #redirect('http://localhost:8000')
-
-
-# @app.route('/login', methods=['POST', 'GET'])
-# def login():
-#     error = None
-#     global user
-#     if request.method == 'POST':    
-#         user = request.form['username']
-#         password = request.form['password']
-#         if (user == 'admin' and password == 'admin'):
-#             session['logged_in'] = True
-#             return redirect(url_for('index'))
-#         elif user == 'amrinder' and password == 'amrinder':
-#             session['logged_in'] = True
-#             return redirect(url_for('index'))
-#         elif user == 'usman' and password == 'usman':
-#             session['logged_in'] = True
-#             return redirect(url_for('index'))
-#         else:   
-#             error = 'Invalid Credentials. Please try again.'
-#     return render_template('login.html', error=error)
 
 @app.route("/logout", methods = ['GET'])
 @login_required
