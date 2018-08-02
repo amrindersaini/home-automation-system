@@ -91,22 +91,23 @@ canvas {
     <div id="particles-js">
       <div class="top-margin">
         <div class = "container  d-flex">
-            <br>
+            <br/>
             <div class = "jumbotron my-auto text-center">
-                <h1 class="header"><span class="fa fa-lock"></span>&nbsp;Home Automation System Login</h1>
+                <h1 class="header">Registration</h1>
                 <br>
-                <form action="/login" method="post">
+                <form action="/register" method="post">
                    <!-- <input class="form-control" type="text" placeholder="Username" name="username" >
                     <input class="form-control" type="password" placeholder="Password" name="password">
                     <br>
                     <button id="login" type="submit" value="Login" class="btn btn-dark btn-block"> -->
                     <input class="form-control" id="username" name="username" required="" placeholder="Username" value="{{request.form.username}}" type="text">
                     <input class="form-control" id="password" name="password" placeholder="Password" required="" value="{{request.form.password}}" type="password">{{ form.hidden_tag() }}
+                    <input class="form-control" id="key" name="key" required="" placeholder="Registration Key" value="" type="text">
                     <br>
-                    <button type="submit" value="Login" class="btn btn-dark btn-block"> Login </Button>
+                    <button type="submit" value="Submit" class="btn btn-dark btn-block"> Submit </Button>
                 </form>
                 <br />
-                <a id="register" href="#">Please register here</a>
+                <a id="login" href="#">Login Here</a>
                 {% if error %}
                 <p class="error"><strong>Error:</strong> {{ error }}
                 {% endif %}
@@ -114,6 +115,6 @@ canvas {
           </div>
       </div>
     </div>
-    <script src="/static/js/login.js"></script>
+    <script src="/static/js/register.js"></script>
 </body>
 </html>
