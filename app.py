@@ -6,14 +6,11 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import Email, Length, InputRequired
 from flask_mongoengine import MongoEngine, Document
 from werkzeug.security import check_password_hash , generate_password_hash
-import json, urllib
-import os
+import json, urllib, os,  Adafruit_DHT
 from control import Control
 from emergency import Emergency
 from time import sleep
-import Adafruit_DHT
 from threading import Thread, Event
-from automaticDoors import MainDoor
 # import Adafruit_DHT, asyncio, time
 
 app = Flask(__name__)
@@ -35,7 +32,6 @@ login_manager.login_view = 'login'
 socketio = SocketIO(app)
 
 status = {'room1Led': 0, 'room2Led': 0, 'room1Fan': 0, 'room2Fan': 0, 'emergency':0, 'maindoor': 0}
-user = None
 
 thread = Thread()
 thread_stop_event = Event()
@@ -50,32 +46,27 @@ def load_user(user_id):
     return User.objects(pk=user_id).first()
 
 class RegForm(FlaskForm):
-    #username = StringField('username',  validators=[InputRequired(), Email(message='Invalid username'), Length(max=30)])
     username = StringField('username',  validators=[InputRequired(), Length(max=30)])
     password = PasswordField('password', validators=[InputRequired(), Length(min=4, max=20)])
     key = StringField('key', validators=[InputRequired()])
 
 class LogForm(FlaskForm):
-    #username = StringField('username',  validators=[InputRequired(), Email(message='Invalid username'), Length(max=30)])
     username = StringField('username',  validators=[InputRequired(), Length(max=30)])
     password = PasswordField('password', validators=[InputRequired(), Length(min=4, max=20)])
 
 class Sensors(Thread):
     def __init__(self):
-        self.delay = 5
+        self.delay = 2
         super(Sensors, self).__init__()
 
     def main(self):
         while not thread_stop_event.isSet():
             humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 13)
-            # print ('Humidity is : {0:0.1f}'.format(humidity))
-            # print ('Temperature is : {0:0.1f}'.format(temperature))
             socketio.emit('sensors', {'humidity': humidity, 'temperature': temperature})
             sleep(self.delay)
 
     def run(self):
         self.main()
-
 
 @app.route('/')
 def dashboard():
@@ -131,14 +122,19 @@ def data():
 @app.route('/livefeed', methods = ['GET'])
 @login_required
 def livefeed():
-    return render_template('livefeed.html', username = user)
+    # global status
+    # emit('mainDoorLiveFeed', status['maindoor'], broadcast = True)
+    return render_template('livefeed.html', username = current_user.username)
+
+# @app.route('/status', methods = ['GET'] )
+# @login_required
+# def status():
+#     return json.dumps(status['maindoor'])
 
 @app.route("/logout", methods = ['GET'])
 @login_required
 def logout():
     logout_user()
-    # session['logged_in'] = False
-    # return index()
     return redirect(url_for('login'))
 
 @socketio.on('connect')
@@ -165,14 +161,15 @@ def mainDoorLiveFeed(value):
 @socketio.on('maindoor')
 def maindoor(value):
     Control.maindoor(value)
-    # MainDoor.trigger(value)
     emit('mainDoorHandler', value, broadcast = True)
    
 @socketio.on('emergency')
 def emergency(flag):
     if(flag == 1):
         emit('emergencyON', broadcast = True)
-        Emergency.email()
+        humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 13)
+        Emergency.email(current_user.username, temperature, humidity)
+        Emergency.email(current_user.username)
     else:
         emit('emergencyOFF', broadcast = True)
     

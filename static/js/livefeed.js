@@ -15,9 +15,26 @@ $(() =>  {
     //     const img = document.getElementById("img-video-tag")
     //     img.setAttribute('style', img.getAttribute('style'))
     // })
+    getData()
 })
 
-socket.on('mainDoorHandler', () => {
+function getData() {
+    $.get('http://' + document.domain + ':' +'5000/data', (data) => {
+        //console.log("Data" + data)
+        jsonObj = JSON.parse(data)
+        // console.log(jsonObj)
+        // console.log(jsonObj.maindoor)
+        if(jsonObj.maindoor == 1){
+            maindoor.checked = true
+        }
+        else maindoor.checked = false
+        // updateStatus( jsonObj)
+        //console.log(jsonObj.ledRoom1)
+
+    })
+}
+
+socket.on('mainDoorHandler', (value) => {
     if(value == 1)
         maindoor.checked = true
     else maindoor.checked = false

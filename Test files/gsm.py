@@ -4,7 +4,7 @@ from time import sleep
 import serial
 
 phone = serial.Serial("/dev/ttyUSB0", 115200, timeout=10)
-recipient = "4168457945"
+recipient = ""
 
 def emergency():
     message = "Current Temperature =>" + temperature

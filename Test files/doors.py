@@ -34,7 +34,6 @@ class Doors():
                 button_state = GPIO.input(20)
                 print(button_state)
                 if button_state != last_button_state:
-                    print("im here")
                     self.change(button_state)
                     print("reached here")
                     #sleep(2.0)

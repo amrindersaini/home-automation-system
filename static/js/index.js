@@ -29,7 +29,7 @@ $(() =>  {
     livefeed.href = 'http://' + document.domain + ':5000/livefeed' 
     hello.classList.add("active")
     live.classList.remove("active")
-    console.log(switches)
+    //console.log(switches)
 })
 
 function getData() {
@@ -38,7 +38,6 @@ function getData() {
         jsonObj = JSON.parse(data)
         updateStatus( jsonObj)
         //console.log(jsonObj.ledRoom1)
-
     })
 }
 
